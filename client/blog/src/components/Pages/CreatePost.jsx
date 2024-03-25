@@ -21,6 +21,7 @@ const [title,setTitle]=useState('')
 const [summary,setSummary]=useState('')
 const[content,setContent]=useState('')
 const [files,setFiles]=useState(null)
+const [redirect,setRedirect]=useState(false);
     async function createNewPost(e){
    e.preventDefault();
    const data= new FormData()
@@ -30,12 +31,17 @@ const [files,setFiles]=useState(null)
    if(files){
    data.set('file',files[0]);
    }
-   console.log(data)
-    await fetch('http://127.0.0.1:5173/post',{
+    const response=await fetch('http://127.0.0.1:4000/post',{
         method:'POST',
         body:data,
      })
+     if(response.ok){
+setRedirect(true)
+     }
    } 
+   if(redirect){
+    return <Navigate to ="/"/>
+   }
   return (
   <form onSubmit={createNewPost}>
   <input type="text" placeholder='title' value ={title} onChange={(e)=>{setTitle(e.target.value)}}/>
